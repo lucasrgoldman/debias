@@ -1,0 +1,86 @@
+{% extends 'base.html'%}
+
+{% block head %} 
+<title>New Prediction</title>
+{% endblock %} 
+
+{% block body %} 
+
+<h1>New Prediction</h1>
+    <hr>
+    <h2>Prediction:</h2>
+    <!-- This could be wrong -->
+    <form action='/prediction/new' method='POST'> 
+    <label for="defensive_simple_rating_system">Defensive Simple Rating System:</label>
+    <input type="range" class="custom-range" min="0" max="10" id="defensive_simple_rating_system">
+    <br>
+    <label for="fumbles">Fumbles:</label>
+    <input class="form-control" type="number" name='fumbles' id='fumbles' placeholder="Enter Fumbles" aria-label="Enter Fumbles">
+    <br>
+    <label for="interceptions">Interceptions:</label>
+    <input class="form-control" type="number" name='interceptions' id='interceptions' placeholder="Enter Interceptions" aria-label="Enter Interceptions">
+    <br>
+    <label for="margin_of_victory">Margin of Victory:</label>
+    <input class="form-control" type="number" name='margin_of_victory' id="margin_of_victory" placeholder="Enter Margin of Victory"  aria-label="Enter Margin of Victory" >
+    <br>
+    <label for="offensive_simple_rating_system">Offensive Simple Rating System=:</label>
+    <input class="form-control" type="number" name='offensive_simple_rating_system' id='offensive_simple_rating_system' placeholder="Enter OSRS" aria-label="Enter OSRS">
+    <br>
+    <label for="pass_net_yards_per_attempt">Pass Net Yards Per Attempt:</label>
+    <input class="form-control" type="number" name='pass_net_yards_per_attempt' id='pass_net_yards_per_attempt' placeholder="Enter Pass Yards Per Attempt" aria-label="Enter Pass Yards Per Attempt">
+    <br>
+    <label for="pass_touchdowns">Pass Touchdowns:</label>
+    <input class="form-control" type="number" name='pass_touchdowns' id="pass_touchdowns" placeholder="Enter Pass Touchdowns"  aria-label="Enter Pass Touchdowns" >
+    <br>
+    <label for="pass_yards">Pass Yards:</label>
+    <input class="form-control" type="number" name='pass_yards' id='pass_yards' placeholder="Enter Pass Yards" aria-label="Enter Pass Yard">
+    <br>
+    <label for="penalties">Penalties:</label>
+    <input class="form-control" type="number" name='penalties' id='penalties' placeholder="Enter Penalties" aria-label="Enter Penalties">
+    <br>
+    <label for="percent_drives_with_points">Percent Drives With Points:</label>
+    <input class="form-control" type="number" name='percent_drives_with_points' id="percent_drives_with_points" placeholder="Enter Percent Drives With Points"  aria-label="Enter Percent Drives With Points" >
+    <br>
+    <label for="percent_drives_with_turnovers">Percent Drives With Turnovers:</label>
+    <input class="form-control" type="number" name='percent_drives_with_turnovers' id="percent_drives_with_turnovers" placeholder="Enter Percent Drives With Turnovers"  aria-label="Enter Percent Drives With Turnovers" >
+    <br>
+    <label for="points_against">Points Against:</label>
+    <input class="form-control" type="number" name='points_against' id='points_against' placeholder="Enter Points Against" aria-label="Enter Points Against">
+    <br>
+    <label for="rank">Rank:</label>
+    <input class="form-control" type="number" name='rank' id="rank" placeholder="Enter Rank"  aria-label="Enter Rank ">
+    <br>
+    <label for="rush_touchdowns">Rush Touchdowns:</label>
+    <input class="form-control" type="number" name='rush_touchdowns' id='rush_touchdowns' placeholder="Enter Rush Touchdowns" aria-label="Enter Rush Touchdowns">
+    <br>
+    <label for="rush_yards">Rush Yards:</label>
+    <input class="form-control" type="number" name='rush_yards' id='rush_yards' placeholder="Enter Rush Yards" aria-label="Enter Rush Yards">
+    <br>
+    <label for="rush_yards_per_attempt">Rush Yards per Attempt:</label>
+    <input class="form-control" type="number" name='rush_yards_per_attempt' id="rush_yards_per_attempt" placeholder="Enter Rush Yards per Attempt"  aria-label="Enter Rush Yards per Attempt" >
+    <br>
+    <label for="simple_rating_system">Simple Rating System:</label>
+    <input class="form-control" type="number" name='simple_rating_system' id="simple_rating_system" placeholder="Enter SRS"  aria-label="Enter SRS" >
+    <br>
+    <label for="strength_of_schedule">Strength of Schedule:</label>
+    <input class="form-control" type="number" name='strength_of_schedule' id='strength_of_schedule' placeholder="Enter Strength of Schedule" aria-label="Enter Strength of Schedule">
+    <br>
+    <label for="turnovers">Turnovers:</label>
+    <input class="form-control" type="number" name='turnovers' id="turnovers" placeholder="Enter Turnovers"  aria-label="Enter Turnovers ">
+    <br>
+    <label for="win_percentage">Win Percentage:</label>
+    <input class="form-control" type="number" name='win_percentage' id='win_percentage' placeholder="Enter Win Percentage" aria-label="Enter Win Percentage">
+    <br>
+    <label for="yards">Yards:</label>
+    <input class="form-control" type="number" name='yards' id='yards' placeholder="Enter Yards" aria-label="Enter Yards">
+    <br>
+    <label for="yards_from_penalties">Yards From Penalties:</label>
+    <input class="form-control" type="number" name='yards_from_penalties' id="yards_from_penalties" placeholder="Enter Yards From Penalties"  aria-label="Enter Yards From Penalties" >
+    <br>
+    <label for="yards_per_play">Yards Per Play:</label>
+    <input class="form-control" type="number" name='yards_per_play' id="yards_per_play" placeholder="Enter Yards Per Play"  aria-label="Enter Yards Per Play" >
+    <br>
+    <input type='submit' value='Save'>
+</form>
+<hr>
+{% endblock %} 
