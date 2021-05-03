@@ -13,7 +13,7 @@
 <br>
 <h2> Scale: </h2>
 
-<small> defensive_simple_rating_system = {{ pred.defensive_simple_rating_system }}</small>
+<!-- <small> defensive_simple_rating_system = {{ pred.defensive_simple_rating_system }}</small>
 <small> fumbles = {{ pred.fumbles }}</small>
 <small> interceptions = {{ pred.interceptions }}</small>
 <small> margin_of_victory = {{ pred.margin_of_victory }}</small>
@@ -35,10 +35,10 @@
 <small> win_percentage = {{ pred.win_percentage }}</small>
 <small> yards = {{ pred.yards }}</small>
 <small> yards_from_penalties = {{ pred.yards_from_penalties }}</small>
-<small> yards_per_play = {{ pred.yards_per_play }}</small>
+<small> yards_per_play = {{ pred.yards_per_play }}</small> -->
 
-<small>{{pred.to_html()}}</small>
 <br>
+<a class="btn btn-danger" href='/prediction/view/{{pred.id}}'>View</a>
 <a class="btn btn-danger" href='/prediction/delete/{{pred.id}}'>Delete</a>
 <a class="btn btn-primary" href='/prediction/edit/{{pred.id}}'>Edit</a>
 <!-- <a class="btn btn-primary" href='/prediction/predict/{{pred.id}}'>Predict</a> -->
