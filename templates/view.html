@@ -1,13 +1,12 @@
-<!DOCTYPE html>
-<html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <title>View</title>
-</head>
-<body>
+{% extends 'base.html'%}
+{% block body %}
+<!doctype html>
+<title>Your Rankings</title>
+<link rel=stylesheet type=text/css href="{{ url_for('static', filename='css/style.css') }}">
+<div class=page>
+  {% for table in tables %}
+    {{ table|safe }}
+  {% endfor %}
+</div>
 
-{% for table in tables %}
-            {{ table|safe }}
-{% endfor %}
-</body>
-</html>
+{% endblock %}

@@ -69,16 +69,8 @@ class Prediction(db.Model):
         self.yards_from_penalties = yards_from_penalties
         self.yards_per_play = yards_per_play
 
-    
-    @staticmethod
-    def predict (team1, team2):
-        t1 = teams_df['percentile'].loc[team1]
-        t2 = teams_df['percentile'].loc[team2]
-        p = 1/(10**(-(t1 - t2))+1)
-        return probToMoneyLine(p)
-
-    @staticmethod
-    def probToMoneyLine (prob):
+    #@staticmethod
+    def probToMoneyLine (self,prob):
         ml = 0
         prob*=100
         if prob >50:
@@ -89,6 +81,14 @@ class Prediction(db.Model):
             ml = 100
         return ml
 
+    def predict (self, team1, team2):
+        teams_df=self.getDF()
+        t1 = teams_df['percentile'].loc[team1]
+        t2 = teams_df['percentile'].loc[team2]
+        p = 1/(10**(-(t1 - t2))+1)
+        return self.probToMoneyLine(p)
+
+
     def plot(self):
         sns.kdeplot(self.teams_df['sum'])
 
@@ -98,10 +98,10 @@ class Prediction(db.Model):
             team1 = game['teams'][0]
             team2 = game['teams'][1]
             # print(team1, ' vs', team2)
-            # print('Predicted Line for', team1,'is', predict(team1, team2))
+            return 'Predicted Line for', team1,'is', predict(team1, team2)
             # print('Actual Line for', team1,'is', game['odds'][0] )
 
-    def to_html(self):
+    def getDF(self):
         teams = Teams(year= '2020')
         teams_df = teams.dataframes
         teams_df.set_index('name', inplace=True)
@@ -150,7 +150,7 @@ class Prediction(db.Model):
         teams_df.sort_values(by=['sum'], inplace=True, ascending=False)
         teams_df['zscores'] = stats.zscore(teams_df['sum'])
         teams_df['percentile'] =  1- stats.norm.sf(teams_df['zscores'])
-        return teams_df.to_html(header="true", table_id="table")
+        return teams_df
 
     @staticmethod
     def getML():
@@ -197,7 +197,6 @@ class Prediction(db.Model):
 
     def __repr__(self):
         return 'Prediction  Number: ' + str(self.id)
-        
 
 @app.route('/') #base url
 def index():
@@ -214,6 +213,17 @@ def delete(id):
     db.session.delete(pred)
     db.session.commit()
     return redirect('/prediction')
+
+@app.route('/prediction/predict/<int:id>', methods = ['GET','POST'])
+def predict(id):
+    pred = Prediction.query.get_or_404(id)
+    if request.method == 'POST':
+        team1 = request.form['team1']
+        team2 = request.form['team2']
+        ml = pred.predict(team1, team2)
+        return render_template('predict.html',  pred=pred,team1=team1, team2=team2,ml=ml)
+    else:
+        return render_template('listteams.html', pred=pred)
 
 @app.route('/prediction/view/<int:id>')
 def view(id):
