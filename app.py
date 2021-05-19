@@ -8,8 +8,12 @@ from scipy import stats
 import json
 import requests
 import argparse
-import matplotlib.pyplot as plt
+import matplotlib
+matplotlib.use('Agg')
+from matplotlib import pyplot as plt
 import seaborn as sns
+import io
+import base64
 
 
 app = Flask(__name__) 
@@ -100,7 +104,8 @@ class Prediction(db.Model):
 
 
     def plot(self):
-        sns.kdeplot(self.teams_df['sum'])
+        sns_plot = sns.kdeplot(self.teams_df['sum'])
+        sns_plot.savefig("output.png")
 
     def predictGames(self):
         games = getML()
@@ -235,10 +240,16 @@ def predict(id):
 @app.route('/prediction/view/<int:id>')
 def view(id):
     pred = Prediction.query.get_or_404(id)
-    teams_df = pred.getDF()
-    teams_df = teams_df.round(2)
-    teams_df = teams_df[['zscores', 'percentile']]
-    return render_template('view.html',  tables=[teams_df.to_html(classes='data')], titles=teams_df.columns.values)
+    view_df = pred.getDF()
+    view_df = view_df.round(2)
+    view_df = view_df[['sum', 'zscores', 'percentile']]
+    img = io.BytesIO()
+    sns_plot = sns.kdeplot(view_df['sum'])
+    plt.savefig(img, format='png')
+    img.seek(0)
+    plot_url = base64.b64encode(img.getvalue()).decode()
+    # img_html = '<img src="data:image/png;base64,{}">'.format(plot_url)
+    return render_template('view.html', plot_url=plot_url, tables=[view_df.to_html(classes='data')], titles=view_df.columns.values)
 
 @app.route('/prediction/edit/<int:id>', methods = ['GET','POST'])
 def edit(id):

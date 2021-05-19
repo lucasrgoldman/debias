@@ -7,6 +7,10 @@
   {% for table in tables %}
     {{ table|safe }}
   {% endfor %}
+
+  <br>
+  <br>
+  <img src="data:image/png;base64, {{ plot_url }}">
 </div>
 
 {% endblock %}
