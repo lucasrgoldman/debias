@@ -79,7 +79,11 @@ class Prediction(db.Model):
             ml = (((100 - prob)/prob) * 100)
         else:
             ml = 100
-        return ml
+        ml = round(ml,2)
+        mlStr = str(ml)
+        if ml > 0:
+            mlStr = "+" + mlStr
+        return mlStr
 
     def predict (self, team1, team2):
         teams_df=self.getDF()
@@ -228,55 +232,7 @@ def predict(id):
 @app.route('/prediction/view/<int:id>')
 def view(id):
     pred = Prediction.query.get_or_404(id)
-    teams = Teams(year= '2020')
-    teams_df = teams.dataframes
-    teams_df.set_index('name', inplace=True)
-    teams_df.drop(['first_downs', 'first_downs_from_penalties',  'games_played','losses', 'abbreviation','pass_attempts', 'pass_completions', 'pass_first_downs','plays', 'points_contributed_by_offense','post_season_result', 'rush_attempts', 'rush_first_downs', 'wins'], axis=1, inplace= True)
-    for (columnName, columnData) in teams_df.iteritems(): 
-        if columnName != 'name':
-            teams_df[columnName] = stats.zscore(columnData)
-    teams_df['fumbles'] *= -1
-    teams_df['interceptions'] *= -1
-    teams_df['penalties'] *= -1
-    teams_df['percent_drives_with_turnovers'] *= -1
-    teams_df['points_against'] *= -1
-    teams_df['turnovers'] *= -1
-    teams_df['yards_from_penalties'] *= -1
-    rank = pd.Series()
-    rank['defensive_simple_rating_system'] = pred.defensive_simple_rating_system
-    rank['fumbles'] =pred.fumbles
-    rank['interceptions'] =pred.interceptions
-    rank['margin_of_victory'] = pred.margin_of_victory
-    rank['offensive_simple_rating_system'] = pred.offensive_simple_rating_system
-    rank['pass_net_yards_per_attempt'] = pred.pass_net_yards_per_attempt
-    rank['pass_touchdowns'] = pred.pass_touchdowns
-    rank['pass_yards'] =pred.pass_yards
-    rank['penalties'] =pred.penalties
-    rank['percent_drives_with_points'] =pred.percent_drives_with_points
-    rank['percent_drives_with_turnovers'] = pred.percent_drives_with_turnovers
-    rank['points_against'] =pred.points_against
-    rank['rank'] = pred.rank
-    rank['rush_touchdowns'] = pred.rush_touchdowns
-    rank['rush_yards'] = pred.rush_yards
-    rank['rush_yards_per_attempt'] =pred.rush_yards_per_attempt
-    rank['simple_rating_system'] = pred.simple_rating_system
-    rank['strength_of_schedule'] = pred.strength_of_schedule
-    rank['turnovers'] = pred.turnovers
-    rank['win_percentage'] = pred.win_percentage
-    rank['yards'] = pred.yards
-    rank['yards_from_penalties'] = pred.yards_from_penalties
-    rank['yards_per_play'] = pred.yards_per_play
-    sum = rank.sum() 
-    rank/=sum
-    for (columnName, columnData) in rank.iteritems(): 
-        teams_df[columnName]*= columnData
-    teams_df['sum'] = 0.0
-    for i, row in teams_df.iterrows():
-        teams_df.at[i, 'sum'] = row['defensive_simple_rating_system':].sum()
-    teams_df.sort_values(by=['sum'], inplace=True, ascending=False)
-    teams_df['zscores'] = stats.zscore(teams_df['sum'])
-    teams_df['percentile'] =  1- stats.norm.sf(teams_df['zscores'])
-    teams_df.drop(['points_for','points_difference','defensive_simple_rating_system', 'fumbles', 'interceptions', 'margin_of_victory', 'offensive_simple_rating_system','pass_net_yards_per_attempt','pass_touchdowns','pass_yards','penalties', 'percent_drives_with_points', 'percent_drives_with_turnovers', 'points_against','rank', 'rush_touchdowns', 'rush_yards', 'rush_yards_per_attempt', 'simple_rating_system', 'strength_of_schedule','turnovers','win_percentage', 'yards', 'yards_from_penalties', 'yards_per_play'], axis=1, inplace= True)
+    teams_df = pred.getDF()
     teams_df = teams_df.round(2)
     return render_template('view.html',  tables=[teams_df.to_html(classes='data')], titles=teams_df.columns.values)
 

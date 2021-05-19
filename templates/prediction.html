@@ -11,14 +11,13 @@
 <br>
 {% for pred in preds %}
 <br>
-<h2> Scale: </h2>
+<h2> Prediction #{{pred.id}} </h2>
 
 <br>
 <a class="btn btn-primary" href='/prediction/view/{{pred.id}}'>View</a>
 <a class="btn btn-danger" href='/prediction/delete/{{pred.id}}'>Delete</a>
-<a class="btn btn-dark" href='/prediction/edit/{{pred.id}}'>Edit</a>
+<a class="btn btn-secondary" href='/prediction/edit/{{pred.id}}'>Edit</a>
 <a class="btn btn-dark" href='/prediction/predict/{{pred.id}}'>Predict</a>
-<!-- <a class="btn btn-primary" href='/prediction/predict/{{pred.id}}'>Predict</a> -->
 
 <hr>
 {% endfor %}
