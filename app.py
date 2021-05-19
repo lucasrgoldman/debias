@@ -16,6 +16,12 @@ app = Flask(__name__)
 app.config['SQLALCHEMY_DATABASE_URI'] = 'sqlite:///prediction.db'
 db = SQLAlchemy(app) # Linking DB
 
+
+teams = Teams(year= '2020')
+orig_df = teams.dataframes
+orig_df.set_index('name', inplace=True)
+orig_df.drop(['first_downs', 'first_downs_from_penalties',  'games_played','losses', 'abbreviation','pass_attempts', 'pass_completions', 'pass_first_downs','plays', 'points_contributed_by_offense','post_season_result', 'rush_attempts', 'rush_first_downs', 'wins'], axis=1, inplace= True)
+
 class Prediction(db.Model):
     id = db.Column(db.Integer, primary_key=True)
     defensive_simple_rating_system = db.Column(db.Integer, nullable=False)
@@ -106,10 +112,7 @@ class Prediction(db.Model):
             # print('Actual Line for', team1,'is', game['odds'][0] )
 
     def getDF(self):
-        teams = Teams(year= '2020')
-        teams_df = teams.dataframes
-        teams_df.set_index('name', inplace=True)
-        teams_df.drop(['first_downs', 'first_downs_from_penalties',  'games_played','losses', 'abbreviation','pass_attempts', 'pass_completions', 'pass_first_downs','plays', 'points_contributed_by_offense','post_season_result', 'rush_attempts', 'rush_first_downs', 'wins'], axis=1, inplace= True)
+        teams_df = orig_df
         for (columnName, columnData) in self.teams_df.iteritems(): 
             if columnName != 'name':
                 teams_df[columnName] = stats.zscore(columnData)
@@ -234,6 +237,7 @@ def view(id):
     pred = Prediction.query.get_or_404(id)
     teams_df = pred.getDF()
     teams_df = teams_df.round(2)
+    teams_df = teams_df[['zscores', 'percentile']]
     return render_template('view.html',  tables=[teams_df.to_html(classes='data')], titles=teams_df.columns.values)
 
 @app.route('/prediction/edit/<int:id>', methods = ['GET','POST'])
