@@ -1,9 +1,16 @@
 {% extends 'base.html'%}
 {% block head %}
-  < title>Select the Matchup you would like to Predict </title>
+  < title>Predict this Week's Matchups or Select the Matchup you would like to Predict </title>
 {% endblock %}
 
 {% block body %}
+<br>
+
+<a class="btn btn-primary" href='/prediction/predict/{{pred.id}}/weekly_matchups'>Predict This Weeks Matchups</a>
+
+<br>
+
+
 {% set teams = ["Arizona Cardinals","Atlanta Falcons","Baltimore Ravens","Buffalo Bills","Carolina Panthers","Chicago Bears","Cincinnati Bengals","Cleveland Browns","Dallas Cowboys","Denver Broncos","Detroit Lions","Green Bay Packers","Houston Texans","Indianapolis Colts","Jacksonville Jaguars","Kansas City Chiefs","Las Vegas Raiders","Los Angeles Chargers","Los Angeles Rams","Miami Dolphins","Minnesota Vikings","New England Patriots","New Orleans Saints","New York Giants","New York Jets","Philadelphia Eagles","Pittsburgh Steelers","San Francisco 49ers","Seattle Seahawks","Tampa Bay Buccaneers","Tennessee Titans","Washington Football Team"] %}
 
   <form action='/prediction/predict/{{pred.id}}' method='POST'> 

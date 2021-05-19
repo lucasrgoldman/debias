@@ -1,0 +1,20 @@
+{% extends 'base.html'%}
+
+{% block head %}
+<title>Your Predictions for this Week's Matchups</title>
+{% endblock %}
+
+{% block body %} 
+
+{% for pred in predictions %}
+
+<h2>{{pred['team1']}} vs. {{pred['team2']}}</title>
+<br>
+
+<h4> Your Line: {{pred['prediction']}}</h2>
+
+<h4> Vegas's Line: {{pred['vegas_odds']}}</h2>
+<br>
+{% endfor %}
+
+{% endblock %} 

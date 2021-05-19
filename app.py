@@ -54,51 +54,46 @@ class Prediction(db.Model):
     date_posted = db.Column(db.DateTime, nullable=False, default=datetime.utcnow)
     teams_df = pd.DataFrame()
 
-    @staticmethod
-    def getML():
-        parser = argparse.ArgumentParser(description='Sample')
-        parser.add_argument('--api-key', type=str, default='')
-        args, unknown = parser.parse_known_args()
-        API_KEY = '58f860df380e5b01f108f9418584b714'
-        SPORT = 'americanfootball_nfl' # use the sport_key from the /sports endpoint below, or use 'upcoming' to see the next 8 games across all sports
-        REGION = 'us' # uk | us | eu | au
-        MARKET = 'h2h' # h2h | spreads | totals
-        ODDSFORMAT  = 'american'
-    
-        # Now get a list of live & upcoming games for the sport you want, along with odds for different bookmakers
-    
-        odds_response = requests.get('https://api.the-odds-api.com/v3/odds', params={
-            'api_key': API_KEY,
-            'sport': SPORT,
-            'region': REGION,
-            'mkt': MARKET,
-            'oddsFormat': ODDSFORMAT,
-        })
-
-        odds_json = json.loads(odds_response.text)
-        games = []
-        if not odds_json['success']:
-            print(odds_json['msg'])
-        else:
-            print('Number of events:', len(odds_json['data']))
-            # print(odds_json['data'])
-            for i, game in enumerate(odds_json['data'], start=0):
-                games.append({})
-                games[i]['teams'] = game['teams']
-                games[i]['home'] = game['home_team']
-
-                for site in game['sites']:
-                    if site['site_nice'] == 'Caesars':
-                        games[i]['odds'] = site['odds']['h2h']
-
-            # Check your usage
-            # print('Remaining requests', odds_response.headers['x-requests-remaining'])
-            # print('Used requests', odds_response.headers['x-requests-used'])
-
-        return games
-
     def __repr__(self):
         return 'Prediction  Number: ' + str(self.id)
+
+def getVegas():
+    parser = argparse.ArgumentParser(description='Sample')
+    parser.add_argument('--api-key', type=str, default='')
+    args, unknown = parser.parse_known_args()
+    API_KEY = '58f860df380e5b01f108f9418584b714'
+    SPORT = 'americanfootball_nfl' # use the sport_key from the /sports endpoint below, or use 'upcoming' to see the next 8 games across all sports
+    REGION = 'us' # uk | us | eu | au
+    MARKET = 'h2h' # h2h | spreads | totals
+    ODDSFORMAT  = 'american'
+
+    # Now get a list of live & upcoming games for the sport you want, along with odds for different bookmakers
+
+    odds_response = requests.get('https://api.the-odds-api.com/v3/odds', params={
+        'api_key': API_KEY,
+        'sport': SPORT,
+        'region': REGION,
+        'mkt': MARKET,
+        'oddsFormat': ODDSFORMAT,
+    })
+
+    odds_json = json.loads(odds_response.text)
+    games = []
+    if not odds_json['success']:
+        print(odds_json['msg'])
+    else:
+        print('Number of events:', len(odds_json['data']))
+        # print(odds_json['data'])
+        for i, game in enumerate(odds_json['data'], start=0):
+            games.append({})
+            games[i]['teams'] = game['teams']
+            games[i]['home'] = game['home_team']
+
+            for site in game['sites']:
+                if site['site_nice'] == 'DraftKings':
+                    if site['odds']['h2h'][0] > 0:
+                        games[i]['odds'] = '+' + str(site['odds']['h2h'][0])
+    return games
 
 def probToMoneyLine (prob):
         ml = 0
@@ -115,7 +110,7 @@ def probToMoneyLine (prob):
             mlStr = "+" + mlStr
         return mlStr
 
-def predict (pred, team1, team2):
+def predictMoneyLine (pred, team1, team2):
     teams_df= getDF(pred)
     t1 = teams_df['percentile'].loc[team1]
     t2 = teams_df['percentile'].loc[team2]
@@ -201,10 +196,31 @@ def predict(id):
     if request.method == 'POST':
         team1 = request.form['team1']
         team2 = request.form['team2']
-        ml = predict(pred, team1, team2)
+        ml = predictMoneyLine(pred, team1, team2)
         return render_template('predict.html',  pred=pred,team1=team1, team2=team2,ml=ml)
     else:
         return render_template('listteams.html', pred=pred)
+
+@app.route('/prediction/predict/<int:id>/weekly_matchups')
+def weekly_matchups(id):
+    pred = Prediction.query.get_or_404(id)
+    games = getVegas()
+    predictions = []
+    i=0
+    for game in games:
+        if i > 15: #Only fetch one week of games
+            break;
+        if 'odds' in game:
+            team1 = game['teams'][0]
+            team2 = game['teams'][1]
+            predictions.append({})
+            predictions[i]['team1'] = team1
+            predictions[i]['team2'] = team2
+            predictions[i]['prediction'] = predictMoneyLine(pred, team1, team2)
+            predictions[i]['vegas_odds'] = game['odds']
+            i+=1
+    return render_template('weekly_matchups.html',  predictions=predictions)
+    
 
 @app.route('/prediction/view/<int:id>')
 def view(id):
@@ -217,7 +233,6 @@ def view(id):
     plt.savefig(img, format='png')
     img.seek(0)
     plot_url = base64.b64encode(img.getvalue()).decode()
-    # img_html = '<img src="data:image/png;base64,{}">'.format(plot_url)
     return render_template('view.html', plot_url=plot_url, tables=[view_df.to_html(classes='data')], titles=view_df.columns.values)
 
 @app.route('/prediction/edit/<int:id>', methods = ['GET','POST'])
