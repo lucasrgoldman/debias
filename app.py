@@ -1,6 +1,5 @@
 from flask import Flask, render_template, request, redirect
 from flask_sqlalchemy import SQLAlchemy
-from datetime import datetime
 from sportsreference.nfl.teams import Teams
 import pandas as pd
 import numpy as np
@@ -14,7 +13,7 @@ from matplotlib import pyplot as plt
 import seaborn as sns
 import io
 import base64
-
+from datetime import datetime
 
 app = Flask(__name__) 
 app.config['SQLALCHEMY_DATABASE_URI'] = 'sqlite:///prediction.db'
@@ -301,4 +300,4 @@ def new_prediction():
         return render_template('new_prediction.html') # send var to posts.htmls
 
 if __name__ == "__main__": #if from terminal
-    app.run(debug=True)
+    app.run(host ='0.0.0.0', port = 5001, debug = True)
