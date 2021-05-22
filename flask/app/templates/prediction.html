@@ -1,13 +1,14 @@
 {% extends 'base.html'%}
 
 {% block head %}
+<br>
 <title>Predictons</title>
 {% endblock %}
 
 {% block body %}
 <h1>All Predictions</h1>
 <br>
-<a class= "btn btn-success" href="prediction/new">+ New Predicition</a>
+<a class="btn btn-success" href="prediction/new">+ New Predicition</a>
 <br>
 {% for pred in preds %}
 <br>

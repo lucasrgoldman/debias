@@ -5,16 +5,18 @@
 {% endblock %}
 
 {% block body %} 
-
+<br>
+<hr>
 {% for pred in predictions %}
 
 <h2>{{pred['team1']}} vs. {{pred['team2']}}</title>
 <br>
+<hr>
 
 <h4> Your Line: {{pred['prediction']}}</h2>
 
 <h4> Vegas's Line: {{pred['vegas_odds']}}</h2>
-<br>
+<hr>
 {% endfor %}
 
 {% endblock %} 

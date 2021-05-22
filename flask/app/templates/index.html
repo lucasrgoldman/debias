@@ -6,17 +6,25 @@
 
 {% block body %}
 <br>
-<h1>Home Page</h1>
-<br>
-<div>
-    <div class="bg-light p-5 rounded">
-        <div class="col-sm-8 mx-auto">
-            <h1>Welcome</h1>
-            <p>
-                <a class="btn btn-primary" href="/prediction" role="button">Start Predicting
-                    &raquo;</a>
-            </p>
-        </div>
-    </div>
-</div>
+<main role="main">
+    <h1>Welcome</h1>
+    <hr>
+    <br>
+    <h5>
+        1. Input which statistics affect the outcome of an NFL game.
+    </h5>
+    <br>
+    <h5>
+        2. Create your own NFL power rankings model.
+    </h5>
+    <br>
+    <h5>
+        3. Use these rankings to predict matchups and to beat Vegas!
+    </h5>
+    <br>
+    <p>
+        <a class="btn btn-primary" href="/prediction" role="button">Start Predicting
+            &raquo;</a>
+    </p>
+</main>
 {% endblock %}

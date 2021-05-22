@@ -4,19 +4,37 @@ h1, h2          { margin: 0; }
 h1              { border-bottom: 2px solid #eee; }
 h2              { font-size: 1.2em; }
 
-table.dataframe, .dataframe th, .dataframe td {
+table.dataframe {
   border: none;
-  border-bottom: 1px solid #C8C8C8;
+  border-bottom: 1px solid #2c659b;
   border-collapse: collapse;
-  text-align:left;
+  text-align:center;
+  padding: 30px;
+  margin-bottom: 40px;
+  font-size: 0.9em;
+  display: inline-block;
+  float: left;
+}
+
+.dataframe th, .dataframe td{
+  border: none;
+  border-bottom: 1px solid #2c659b;
+  border-collapse: collapse;
+  text-align:center;
   padding: 10px;
   margin-bottom: 40px;
   font-size: 0.9em;
 }
 
+plot{
+  float: right;
+  width:30%;
+  /* display: inline-block; */
+}
+
 
 .data th {
-    background-color: #2c659b;
+    background-color: #8faac3;
     color: white;
 }
 
