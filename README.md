@@ -4,7 +4,7 @@ This Flask web-app allows users to input how important they believe certain stat
 
 This webapp uses NGINX running as webserver in a docker container.
 
-To run this web app locally, clone the repo, then run 'docker compose up --build'. Note: Docker must be running on your machine for this to work.
+To run this web app locally, clone the repo, then run `docker compose up --build` and go to http://localhost. Note: Docker must be running on your machine for this to work.
 
 Check out nfl-predictor.ipynb to see how the rankings and predictions are created.
 
