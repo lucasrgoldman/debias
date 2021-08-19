@@ -16,7 +16,7 @@ Data is collected from football-reference via the sportsreference api.
 
 <img width="1609" alt="Screen Shot 2021-08-19 at 11 56 30 AM" src="https://user-images.githubusercontent.com/58446351/130102274-d60aed7e-1d1f-46af-b647-eb87e39df24c.png">
 
-### Predict Matchups
+### Predict Matchups and Compare Predictions to Vegas
 
 <img width="1650" alt="Screen Shot 2021-08-19 at 11 56 47 AM" src="https://user-images.githubusercontent.com/58446351/130102231-3605763c-1cd0-4c0d-bb79-b5b30d6b089c.png">
 
