@@ -16,7 +16,7 @@ MarkupSafe==2.0.1
 matplotlib==3.4.2
 numpy==1.20.3
 pandas==1.2.4
-Pillow==8.2.0
+pillow>=8.3.2
 pyparsing==2.4.7
 pyquery==1.4.3
 python-dateutil==2.8.1
